@@ -1,0 +1,17 @@
+a) What PC models have a speed of at least 3.00?
+	1005,1006,1013
+
+b) Which manufacturers make laptops with a hard disk of at least 100GB?
+	E,A,B,F,G
+
+c) Find the model number and price of all products (of any type) made by manufacturer B.
+	1004: $649
+	1005: $630
+	1006: $1049
+	2007: $1429
+	
+d) Find the model numbers of all color laser printers.
+	3003,3007
+
+e) Find those manufacturers that sell Laptops, but not PC's.
+	F,G
