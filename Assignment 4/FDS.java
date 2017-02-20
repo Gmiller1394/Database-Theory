@@ -62,24 +62,26 @@ public class FDS{
   }
 
   boolean follows(FD fd){  // fd follows from FDS
-    return true;
-    // your line of code
+    return closure(fd,lhs).contains(fd, rhs);
+		equivelent (FDS (T));
+		return covers(T) && T.covers(this);
   }
 
   boolean equivalent(FDS T){
-    return true;
-    // your code
+    boolean Covers(FDS T);
+		for(FD fd: T) if(follows(fd)) return false;
+		return true;
+		findAkey();
+			for(char c: R);
+				closure(K.remove(c)).containAll(R);
   }
 
   HashSet<Character> findAKey(){ // returns a key to the relation
     // your code
-    HashSet<Character> Key = new HashSet<Character>();   
-    return Key;
   }
 
  public static void main(String[] args){
-    FDS fds = new FDS("Elmasri1424.txt");
-   // FDS fds = new FDS("Elmasri1425.txt");
+    FDS fds = new FDS(args[0]);
     HashSet<Character> X = fds.string2set(args[1]);
     fds.printSet(fds.closure(X));
     
