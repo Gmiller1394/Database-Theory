@@ -48,6 +48,7 @@ public class FDS{
 
   void printSet(Set<Character> X){
     for (char c: X) System.out.print(c);
+    System.out.println();
   }
 
   HashSet<Character> closure(HashSet<Character> X){ // Algorithm 3.7
@@ -62,28 +63,53 @@ public class FDS{
   }
 
   boolean follows(FD fd){  // fd follows from FDS
-    return closure(fd,lhs).contains(fd, rhs);
-		equivelent (FDS (T));
-		return covers(T) && T.covers(this);
+    return closure(fd.lhs).contains(fd.rhs);
+		//equivelent (FDS (T));
+		//return covers(T) && T.covers(this);
   }
 
   boolean equivalent(FDS T){
-    boolean Covers(FDS T);
-		for(FD fd: T) if(follows(fd)) return false;
-		return true;
-		findAkey();
-			for(char c: R);
-				closure(K.remove(c)).containAll(R);
+    for (FD fd: F){
+      if (!T.follows(fd)){
+        return false;
+      }
+    }
+    for (FD fd: T.F){
+      if (!this.follows(fd)){
+        return false;
+      }
+    }
+    return true;
   }
 
   HashSet<Character> findAKey(){ // returns a key to the relation
-    // your code
+    HashSet<Character> Y = new HashSet<Character>(R);
+    for(char c: R){
+    	Y.remove(c);
+    	if(!closure(Y).containsAll(R)){
+    		Y.add(c);
+    	}
+    }
+    return Y;
   }
 
  public static void main(String[] args){
-    FDS fds = new FDS(args[0]);
+ //Choose a txt file, comment out one of them at a time
+    //FDS fds = new FDS("Elmasri1424.txt"); 
+    FDS fds = new FDS("Elmasri1425.txt");
     HashSet<Character> X = fds.string2set(args[1]);
-    fds.printSet(fds.closure(X));
-    
+    System.out.println("-------------------------------------------");
+    System.out.println("Attributes: "+fds.R);
+    System.out.println("-------------------------------------------");
+    System.out.println("FD's: ");
+    for(FD fd: fds.F){
+      System.out.println(fd.lhs+" -> "+fd.rhs);
+    }
+    System.out.println("-------------------------------------------");
+    System.out.println("Closure of "+args[1]+": "+fds.closure(X));
+    System.out.println("-------------------------------------------");
+    System.out.println("Relation key: "+fds.findAKey());
+    System.out.println("-------------------------------------------");
+
  }
 }
