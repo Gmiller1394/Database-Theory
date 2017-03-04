@@ -9,14 +9,24 @@ import java.util.*;
 
 class FD{
   HashSet<Character> lhs; char rhs;
-  public FD(HashSet<Character> l, char r){ lhs = l; rhs = r; }
-  public boolean equals(Object obj){
+  public FD(HashSet<Character> l, char r)
+  { 
+  	lhs = l; rhs = r; 
+  }
+  public boolean equals(Object obj)
+  {
     FD fd2 = (FD)obj;
     return lhs.equals(fd2.lhs) && rhs == fd2.rhs;
   }
-  public void printout(){
-    for (char c: lhs) System.out.print(c);
-    System.out.print(" "); System.out.print(rhs); System.out.println();
+  public void printout()
+  {
+    for (char c: lhs)
+    {
+    	System.out.print(c);
+    }
+    System.out.print(" ");
+    System.out.print(rhs);
+    System.out.println();
   }
 };
 
@@ -24,46 +34,78 @@ public class FDS2{
   HashSet<Character> R = new HashSet<Character>(); // all attributes
   HashSet<FD> F = new HashSet<FD>(); // the set of FDs
 
-  public FDS2(String filename){  // 1. split FDs so each FD has a single attribute on the right
-    Scanner in = null;
-    try {
+  public FDS2(String filename)
+  {  // 1. split FDs so each FD has a single attribute on the right
+  	Scanner in = null;
+    try
+    {
       in = new Scanner(new File(filename));
-    } catch (FileNotFoundException e){
+    } 
+    catch (FileNotFoundException e)
+    {
        System.err.println(filename + " not found");
        System.exit(1);
     }
     String line = in.nextLine();
-    for (int i = 0; i < line.length(); i++) R.add(line.charAt(i));
-    while (in.hasNextLine()){
+    for (int i = 0; i < line.length(); i++)
+    {
+    	R.add(line.charAt(i));
+    }
+    while (in.hasNextLine())
+    {
       HashSet<Character> l = new HashSet<Character>();
       String[] terms = in.nextLine().split(" ");
-      for (int i = 0; i < terms[0].length(); i++) l.add(terms[0].charAt(i));
-      for (int i = 0; i < terms[1].length(); i++) F.add(new FD(l, terms[1].charAt(i)));
+      for (int i = 0; i < terms[0].length(); i++)
+      {
+      	l.add(terms[0].charAt(i));
+      }
+      for (int i = 0; i < terms[1].length(); i++)
+      {
+      	F.add(new FD(l, terms[1].charAt(i)));
+	  }    
     }
     in.close();
   }
 
-  public FDS2(HashSet<Character> r, HashSet<FD> f){ R = r; F = f; }
+  public FDS2(HashSet<Character> r, HashSet<FD> f)
+  {
+  	R = r; F = f; 
+  }
 
-  HashSet<Character> string2set(String X){
+  HashSet<Character> string2set(String X)
+  {
     HashSet<Character> Y = new HashSet<Character>();
-    for (int i = 0; i < X.length(); i++) Y.add(X.charAt(i));
+    for (int i = 0; i < X.length(); i++)
+    {
+    	Y.add(X.charAt(i));
+    }
     return Y;
   }
 
-  void printSet(Set<Character> X){
+  void printSet(Set<Character> X)
+  {
     for (char c: X) System.out.print(c);
   }
 
-  HashSet<Character> closure(HashSet<Character> X){ // Algorithm 3.7
+  HashSet<Character> closure(HashSet<Character> X)
+  { // Algorithm 3.7
     HashSet<Character> Xplus = new HashSet<Character>(X); // 2. initialize
     int len = 0;
-    do { // 3. push out
+    do 
+    { // 3. push out
       len = Xplus.size();
       for (FD fd: F)
-        if (Xplus.containsAll(fd.lhs) && !Xplus.contains(fd.rhs)) Xplus.add(fd.rhs);
-    } while (Xplus.size() > len);  
-    return Xplus; // 4. found closure of X
+      {
+        if (Xplus.containsAll(fd.lhs) && !Xplus.contains(fd.rhs))
+        {
+         Xplus.add(fd.rhs);
+        }
+      }
+    } 
+    while (Xplus.size() > len);
+    {  
+    	return Xplus; // 4. found closure of X
+    }
   }
 
  FD BCNFviolation(){
@@ -71,18 +113,25 @@ public class FDS2{
 	return null;
  }
 
- void BCNFdecompose(){  // Algorithm 3.20
+ void BCNFdecompose()
+ {  // Algorithm 3.20
 	FD fd = BCNFviolation();
-	if (fd == null){
+	if (fd == null)
+	{
 	  printSet(R); System.out.println();
-	  for (FD f: F){
+	  for (FD f: F)
+	  {
 		boolean redundant = false;
 		for (FD f2: F) // remove those with lhs larger than necessary
-			if (f2.rhs == f.rhs && f.lhs.containsAll(f2.lhs) && !f.lhs.equals(f2.lhs)){
+			if (f2.rhs == f.rhs && f.lhs.containsAll(f2.lhs) && !f.lhs.equals(f2.lhs))
+			{
 				redundant = true; 
 				break;
 			}
-		if (!redundant) f.printout();
+		if (!redundant)
+		{
+			f.printout();
+		}
 	  }
 	  System.out.println();
 	}else{  
