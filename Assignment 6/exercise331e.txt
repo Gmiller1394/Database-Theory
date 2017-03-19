@@ -1,0 +1,4 @@
+ABCDE
+AB C
+DE C
+B D
