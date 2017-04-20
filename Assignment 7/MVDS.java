@@ -75,22 +75,22 @@ public class MVDS{
     int[] row0 = new int[numberOfAttributes];
     int[] row1 = new int[numberOfAttributes];
     for (int i = 0; i < numberOfAttributes; i++){
-	row0[i] = 1; row1[i] = 2;
+  row0[i] = 1; row1[i] = 2;
     }
     for (int i: X) row0[i] = row1[i] = 0;
     boolean changed = true;
     do {
-	changed = false;
-	for (FD f: F){
-		boolean applicable = true;
-		for (int i: f.lhs) if (row0[i] != row1[i]){
-			applicable = false; break; 
-		}
-		if (applicable) if (row0[f.rhs] != row1[f.rhs]){
-			row1[f.rhs] = row0[f.rhs];
-			changed = true;
-		}
-	}
+  changed = false;
+  for (FD f: F){
+    boolean applicable = true;
+    for (int i: f.lhs) if (row0[i] != row1[i]){
+      applicable = false; break; 
+    }
+    if (applicable) if (row0[f.rhs] != row1[f.rhs]){
+      row1[f.rhs] = row0[f.rhs];
+      changed = true;
+    }
+  }
     } while (changed);
     HashSet<Integer> clo = new HashSet<Integer>();
     for (int i = 0; i < numberOfAttributes; i++) if (row0[i] == row1[i]) clo.add(i);
@@ -106,81 +106,81 @@ public class MVDS{
     int[][] temp = new int[2][numberOfAttributes];
     int numberOfRows = 2;
     for (int i = 0; i < numberOfAttributes; i++) if (left.contains(i))
-		tableau[0][i]= tableau[1][i] = 0; // 0 is for the unsubscripted
-	else if (right.contains(i)) {
-		tableau[0][i] = 0; tableau[1][i] = 2;
-	}else{ 	tableau[0][i] = 1; tableau[1][i] = 0; }
+    tableau[0][i]= tableau[1][i] = 0; // 0 is for the unsubscripted
+  else if (right.contains(i)) {
+    tableau[0][i] = 0; tableau[1][i] = 2;
+  }else{  tableau[0][i] = 1; tableau[1][i] = 0; }
 for (int iter = 0; iter < 2; iter++){
     for (int r = 1; r < numberOfRows; r++)
-	for (int s = 0; s < r; s++){
-	    boolean changed = true;
-	    while (changed){
-		changed = false;
-		for (FD fd: F){
-			boolean match = true;
-			for (int l: fd.lhs) if (tableau[r][l] != tableau[s][l]){
-				match = false; break;
-			}
-			if (match) if (tableau[r][fd.rhs] < tableau[s][fd.rhs]){
-				 tableau[s][fd.rhs] = tableau[r][fd.rhs];
-				 changed = true;
-				}else if (tableau[r][fd.rhs] > tableau[s][fd.rhs]){
-				 tableau[r][fd.rhs] = tableau[s][fd.rhs];
-				 changed = true;
-				}
-		}
-	    }
-	    for (MVD m: M){
-		boolean match = true;
-		for (int l: m.lhs) if (tableau[r][l] != tableau[s][l]){
-			match = false; break;
-		}
-		if (match){ 
-			boolean diff1 = false; boolean diff2 = false;
-			for (int t: m.rhs) if (tableau[r][t] != tableau[s][t]) diff1 = true;
-			for (int i = 0; i < numberOfAttributes; i++) 
-				if (!m.lhs.contains(i) && !m.rhs.contains(i)) diff2 = true;
-			if (diff1 && diff2) for (int i = 0; i < numberOfAttributes; i++)
-				if (m.lhs.contains(i)) temp[0][i] = temp[1][i] = tableau[r][i];
-				else if (m.rhs.contains(i)){
-					temp[0][i] = tableau[r][i]; temp[1][i] = tableau[s][i];
-				}else{	temp[0][i] = tableau[s][i]; temp[1][i] = tableau[r][i]; }
-			int k = 0; for (; k < numberOfRows; k++){
-				int i = 0; for (; i < numberOfAttributes; i++)
-					if (tableau[k][i] != temp[0][i]) break;
-				if (i == numberOfAttributes) break;
-			}
-			if (k == numberOfRows){ for (int i = 0; i < numberOfAttributes; i++)
-					tableau[numberOfRows][i] = temp[0][i];
-				numberOfRows++;
-			}
-			k = 0; for (; k < numberOfRows; k++){
-				int i = 0; for (; i < numberOfAttributes; i++)
-					if (tableau[k][i] != temp[1][i]) break;
-				if (i == numberOfAttributes) break;
-			}
-			if (k == numberOfRows){ for (int i = 0; i < numberOfAttributes; i++)
-					tableau[numberOfRows][i] = temp[1][i];
-				numberOfRows++;
-			}
-		}
-	    }
-	}
-	for (int k = 0; k < numberOfRows; k++){
-		for (int i = 0; i < numberOfAttributes; i++) 
-			System.out.print(tableau[k][i]);
-		System.out.println();
-	}
-	System.out.println();
+  for (int s = 0; s < r; s++){
+      boolean changed = true;
+      while (changed){
+    changed = false;
+    for (FD fd: F){
+      boolean match = true;
+      for (int l: fd.lhs) if (tableau[r][l] != tableau[s][l]){
+        match = false; break;
+      }
+      if (match) if (tableau[r][fd.rhs] < tableau[s][fd.rhs]){
+         tableau[s][fd.rhs] = tableau[r][fd.rhs];
+         changed = true;
+        }else if (tableau[r][fd.rhs] > tableau[s][fd.rhs]){
+         tableau[r][fd.rhs] = tableau[s][fd.rhs];
+         changed = true;
+        }
+    }
+      }
+      for (MVD m: M){
+    boolean match = true;
+    for (int l: m.lhs) if (tableau[r][l] != tableau[s][l]){
+      match = false; break;
+    }
+    if (match){ 
+      boolean diff1 = false; boolean diff2 = false;
+      for (int t: m.rhs) if (tableau[r][t] != tableau[s][t]) diff1 = true;
+      for (int i = 0; i < numberOfAttributes; i++) 
+        if (!m.lhs.contains(i) && !m.rhs.contains(i)) diff2 = true;
+      if (diff1 && diff2) for (int i = 0; i < numberOfAttributes; i++)
+        if (m.lhs.contains(i)) temp[0][i] = temp[1][i] = tableau[r][i];
+        else if (m.rhs.contains(i)){
+          temp[0][i] = tableau[r][i]; temp[1][i] = tableau[s][i];
+        }else{  temp[0][i] = tableau[s][i]; temp[1][i] = tableau[r][i]; }
+      int k = 0; for (; k < numberOfRows; k++){
+        int i = 0; for (; i < numberOfAttributes; i++)
+          if (tableau[k][i] != temp[0][i]) break;
+        if (i == numberOfAttributes) break;
+      }
+      if (k == numberOfRows){ for (int i = 0; i < numberOfAttributes; i++)
+          tableau[numberOfRows][i] = temp[0][i];
+        numberOfRows++;
+      }
+      k = 0; for (; k < numberOfRows; k++){
+        int i = 0; for (; i < numberOfAttributes; i++)
+          if (tableau[k][i] != temp[1][i]) break;
+        if (i == numberOfAttributes) break;
+      }
+      if (k == numberOfRows){ for (int i = 0; i < numberOfAttributes; i++)
+          tableau[numberOfRows][i] = temp[1][i];
+        numberOfRows++;
+      }
+    }
+      }
+  }
+  for (int k = 0; k < numberOfRows; k++){
+    for (int i = 0; i < numberOfAttributes; i++) 
+      System.out.print(tableau[k][i]);
+    System.out.println();
+  }
+  System.out.println();
        }
-	int k = 0; for (; k < numberOfRows; k++){
-		boolean unsubscripted = true;
-		for (int i: subset) if (tableau[k][i] != 0){
-			unsubscripted = false; break; }
-		if (unsubscripted) return true;
-	}
-	return false;
- } 		
+  int k = 0; for (; k < numberOfRows; k++){
+    boolean unsubscripted = true;
+    for (int i: subset) if (tableau[k][i] != 0){
+      unsubscripted = false; break; }
+    if (unsubscripted) return true;
+  }
+  return false;
+ }    
 
  void verify(){
   // read three sets of attributes from stdin and apply follows() with them.
@@ -191,12 +191,12 @@ for (int iter = 0; iter < 2; iter++){
   line = in.nextLine();
   HashSet<Integer> rhs = new HashSet<Integer>();
   for (int i = 0; i < line.length(); i++) rhs.add(attr2i.get(line.charAt(i)));
-  line.in.nextLine();
+  line=in.nextLine();
   HashSet<Integer> subset = new HashSet<Integer>();
   for (int i = 0; i < line.length(); i++) subset.add(attr2i.get(line.charAt(i)));
   System.out.println(follows(lhs, rhs, subset));
  }
-		
+    
 
  public static void main(String[] args){
     MVDS mvds = new MVDS(args[0]);
