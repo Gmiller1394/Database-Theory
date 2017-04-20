@@ -111,12 +111,20 @@ public class FDS3{
   }
 
   boolean is3NF(){
-    /* Your code here
-	for (FD fd: F)
-		if ( your code for fd violating 3NF) 
-			return false;
-    */
-	return true;
+  boolean result = true;
+  HashSet<Character> allLHS = new HashSet<Character>();
+	for (FD fd: F){
+    for (Character ch: fd.lhs){
+      allLHS.add(ch);
+    }
+  }
+  for (FD fd: F){
+    if (allLHS.contains(fd.rhs)){
+    result =  false;
+    break;
+    }
+  }
+	return result;
   }
 
   void decompose(){  // Algorithm 3.26
